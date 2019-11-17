@@ -7,6 +7,8 @@ import Vant from 'vant'
 import 'vant/lib/index.css'
 import router from './router.js'
 
+import store from './store'
+
 Vue.use(VueRouter)
 Vue.use(Vant)
 Vue.use(MintUI)
@@ -21,5 +23,6 @@ Vue.filter('dateFormat', function (dataStr, pattern) {
 var vm = new Vue({
   el: '#app',
   render: c => c(app),
-  router
+  router,
+  store
 })

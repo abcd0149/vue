@@ -66,8 +66,8 @@ export default {
       lunbotu: [], // 轮播图的数据
       goodsinfo: {}, //获取到的商品信息
       ballFlag: false, // 隐藏小球动画的标识符
-      selectedCount: 1,  // 保存用户选中的商品数量, 默认认为用户买了一个
-    }
+      selectedCount: 1 // 保存用户选中的商品数量, 默认认为用户买了一个
+    };
   },
   created() {
     this.getLunbotu();
@@ -104,7 +104,19 @@ export default {
       this.$router.push({ name: "goodscomment", params: { id } });
     },
     addToShopCar() {
+      // 添加到购物车
       this.ballFlag = !this.ballFlag;
+      // { id: 商品的id, count: 要购买的数量, price: 商品的单价 selected: false }
+      // 拼接出一个,要保存到 store 中 car 数组里面的 商品信息对象
+      var goodsinfo = {
+        id: this.id,
+        count: this.selectedCount,
+        price: this.goodsinfo.sell_price,
+        selected: true
+      };
+      // 调用 store中的 mutations 来将 商品加入购物车
+      this.$store.commit('addToCar',goodsinfo);
+
     },
     beforeEnter(el) {
       el.style.transform = "translate(0, 0)";
@@ -127,12 +139,14 @@ export default {
       //  获取小球的 在页面中的位置
       const ballPosition = this.$refs.ball.getBoundingClientRect();
       // 获取 徽标 在页面中的位置
-      const badgePosition = document.getElementById("badge").getBoundingClientRect();
+      const badgePosition = document
+        .getElementById("badge")
+        .getBoundingClientRect();
 
       const xDist = badgePosition.left - ballPosition.left;
       const yDist = badgePosition.top - ballPosition.top;
 
-      el.style.transform = `translate(${xDist+48}px,${yDist}px)`;
+      el.style.transform = `translate(${xDist + 48}px,${yDist}px)`;
 
       el.style.transition = "all 0.5s cubic-bezier(.45,.36,.84,.47)";
 
@@ -141,14 +155,10 @@ export default {
     afterEnter(el) {
       this.ballFlag = !this.ballFlag;
     },
-    getSelectedCount(count){
+    getSelectedCount(count) {
       // 当子组件把 选中的数量传递给父组件的时候,把选中的值保存到 data 上
 
       this.selectedCount = count;
- 
-    
-
-
     }
   },
   components: {
